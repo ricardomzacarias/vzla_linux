@@ -1,0 +1,27 @@
+#!/bin/bash
+
+VAR_NAME_SNAPSHOT="snapshot_"$(date +%F_%H_%M_%S)
+
+cd /snapshot
+
+if [ "$(pwd)" != "/snapshot" ];
+then
+        echo "Error no te encuentras en directorio /snapshot estas en $(pwd) "
+        exit 1
+fi
+
+if [ -e $VAR_NAME_SNAPSHOT ];
+then
+        echo "Error el fichero $VAR_NAME_SNAPSHOT esta repetido"
+        exit 1
+fi
+
+btrfs su sn / $VAR_NAME_SNAPSHOT > /dev/null 2>&1
+
+if [ $? -eq 0 ];
+then
+        echo "El snapshot $VAR_NAME_SNAPSHOT se ha creado correctamente"                                                                 
+else                                                                                                                                     
+        echo "Error: el snapshot $VAR_NAME_SNAPSHOT ha fallado"                                                                          
+        exit 1                                                                                                                           
+fi                                                                                                                                       
